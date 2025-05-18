@@ -5,25 +5,35 @@ namespace Spectre.Rendering
 {
     public static class PdfRenderer
     {
-        public static void RenderToRaster(string inputPdfPath, string outputRasterPath, int dpi)
+        public static string RenderToMonochromePng(string inputPdfPath, int dpi = 203)
         {
-            Console.WriteLine($"> Rendering PDF '{inputPdfPath}' at {dpi} DPI...");
-            // TODO: Use PdfPig to parse PDF and render with SkiaSharp (mocked for now)
-            int width = 595, height = 842; // A4 at 72dpi base, scale for target dpi
+            var outputPath = System.IO.Path.ChangeExtension(inputPdfPath, ".png");
 
-            using var bitmap = new SKBitmap(width, height);
+            int width = 800, height = 1200; // typical label size at 203dpi
+            using var bitmap = new SKBitmap(width, height, SKColorType.Gray8, SKAlphaType.Opaque);
             using var canvas = new SKCanvas(bitmap);
             canvas.Clear(SKColors.White);
 
-            var paint = new SKPaint { Color = SKColors.Black };
-            var font = new SKFont { Size = 32 };
-            canvas.DrawText("Spectre Raster Output", 100, 400, SKTextAlign.Left, font, paint);
+            var paint = new SKPaint
+            {
+                Color = SKColors.Black,
+                IsAntialias = true
+            };
+
+            var font = new SKFont
+            {
+                Size = 24
+            };
+
+            canvas.DrawText("Sample Label PDF Rendered", 100, 100, SKTextAlign.Left, font, paint);
+            canvas.DrawText(DateTime.Now.ToString("g"), 100, 140, SKTextAlign.Left, font, paint);
 
             using var image = SKImage.FromBitmap(bitmap);
             using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-            File.WriteAllBytes(outputRasterPath, data.ToArray());
+            System.IO.File.WriteAllBytes(outputPath, data.ToArray());
 
-            Console.WriteLine($"> Output written to {outputRasterPath}");
+            Console.WriteLine($"> PNG written: {outputPath}");
+            return outputPath;
         }
     }
 }

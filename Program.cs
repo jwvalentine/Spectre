@@ -1,43 +1,34 @@
-using Spectre.Rendering;
+using Spectre.Modes;
+using System;
 
 class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Spectre - Minimalist Ghostscript Alternative");
-
         if (args.Length == 0)
         {
-            Console.WriteLine("Usage: spectre -i input.pdf -o output.pgm -r 300");
+            ShowUsage();
             return;
         }
 
-        var input = string.Empty;
-        var output = string.Empty;
-        var dpi = 300;
-
-        for (int i = 0; i < args.Length; i++)
+        if (args[0] == "-i")
         {
-            switch (args[i])
-            {
-                case "-i":
-                    input = args[++i];
-                    break;
-                case "-o":
-                    output = args[++i];
-                    break;
-                case "-r":
-                    dpi = int.Parse(args[++i]);
-                    break;
-            }
+            CliRunner.Run(args);
         }
-
-        if (!File.Exists(input))
+        else if (args.Length == 6)
         {
-            Console.WriteLine($"Input file not found: {input}");
-            return;
+            CupsFilterRunner.Run(args);
         }
+        else
+        {
+            ShowUsage();
+        }
+    }
 
-        PdfRenderer.RenderToRaster(input, output, dpi);
+    static void ShowUsage()
+    {
+        Console.WriteLine("Spectre - Minimalist Ghostscript Alternative");
+        Console.WriteLine("CLI Mode:   spectre -i input.pdf -o output.png -r 300");
+        Console.WriteLine("CUPS Mode:  spectre job-id user title copies options input.pdf");
     }
 }
