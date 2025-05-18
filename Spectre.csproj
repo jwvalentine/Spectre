@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="3.119.0" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.0" />
+    <PackageReference Include="UglyToad.PdfPig" Version="0.1.9-alpha001-patch1" />
+    <PackageReference Include="UglyToad.PdfPig.Core" Version="1.7.0-custom-5" />
+    <PackageReference Include="UglyToad.PdfPig.Fonts" Version="1.7.0-custom-5" />
+    <PackageReference Include="UglyToad.PdfPig.Tokenization" Version="1.7.0-custom-5" />
+    <PackageReference Include="UglyToad.PdfPig.Tokens" Version="1.7.0-custom-5" />
+  </ItemGroup>
+
+</Project>

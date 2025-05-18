@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spectre", "Spectre.csproj", "{CBBC89CE-27F2-58C1-9047-55822C20CDAC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBBC89CE-27F2-58C1-9047-55822C20CDAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBBC89CE-27F2-58C1-9047-55822C20CDAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBBC89CE-27F2-58C1-9047-55822C20CDAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBBC89CE-27F2-58C1-9047-55822C20CDAC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA7B5148-002D-44E4-9D38-28EC4A9C33D3}
+	EndGlobalSection
+EndGlobal
