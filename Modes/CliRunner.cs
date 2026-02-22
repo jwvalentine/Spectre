@@ -1,5 +1,4 @@
 using Spectre.Rendering;
-using System;
 
 namespace Spectre.Modes
 {
@@ -15,31 +14,45 @@ namespace Spectre.Modes
             {
                 switch (args[i])
                 {
-                    case "-i":
-                        input = args[++i];
-                        break;
-                    case "-o":
-                        output = args[++i];
-                        break;
-                    case "-r":
-                        dpi = int.Parse(args[++i]);
-                        break;
+                    case "-i": input = args[++i]; break;
+                    case "-o": output = args[++i]; break;
+                    case "-r": dpi = int.Parse(args[++i]); break;
                 }
             }
 
-            if (!System.IO.File.Exists(input))
+            if (!File.Exists(input))
             {
-                Console.WriteLine($"Input file not found: {input}");
+                Console.Error.WriteLine($"Spectre: input file not found: {input}");
+                Environment.Exit(1);
                 return;
             }
 
-            var png = PdfRenderer.RenderToMonochromePng(input, dpi);
-            Console.WriteLine($"> Rendered: {png}");
+            var pages = PdfRenderer.RenderPages(input, dpi);
 
-            if (!string.IsNullOrEmpty(output) && output != png)
+            if (string.IsNullOrEmpty(output))
             {
-                System.IO.File.Move(png, output, overwrite: true);
-                Console.WriteLine($"> Moved to: {output}");
+                foreach (var p in pages)
+                    Console.WriteLine(p);
+                return;
+            }
+
+            if (pages.Count == 1)
+            {
+                File.Move(pages[0], output, overwrite: true);
+                Console.WriteLine(output);
+            }
+            else
+            {
+                // Multi-page: insert page number before the extension for pages 2+.
+                var ext = Path.GetExtension(output);
+                var stem = Path.ChangeExtension(output, null);
+
+                for (int i = 0; i < pages.Count; i++)
+                {
+                    var dest = i == 0 ? output : $"{stem}_p{i + 1:D4}{ext}";
+                    File.Move(pages[i], dest, overwrite: true);
+                    Console.WriteLine(dest);
+                }
             }
         }
     }

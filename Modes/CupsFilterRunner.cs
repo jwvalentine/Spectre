@@ -1,6 +1,5 @@
 using Spectre.Rendering;
 using Spectre.Zpl;
-using System;
 
 namespace Spectre.Modes
 {
@@ -8,13 +7,27 @@ namespace Spectre.Modes
     {
         public static void Run(string[] args)
         {
+            // CUPS filter argv: job-id user title copies options [filename]
             string inputPdfPath = args[5];
 
             try
             {
-                var pngPath = PdfRenderer.RenderToMonochromePng(inputPdfPath, 203);
-                var zpl = ZplConverter.ConvertPngToZpl(pngPath);
-                Console.Write(zpl);
+                var pages = PdfRenderer.RenderPages(inputPdfPath, dpi: 203);
+
+                foreach (var pngPath in pages)
+                {
+                    try
+                    {
+                        var zpl = ZplConverter.ConvertPngToZpl(pngPath);
+                        Console.Write(zpl);
+                    }
+                    finally
+                    {
+                        // Clean up intermediate PNG; don't leave debris in the CUPS temp dir.
+                        if (File.Exists(pngPath))
+                            File.Delete(pngPath);
+                    }
+                }
             }
             catch (Exception ex)
             {
