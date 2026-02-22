@@ -1,39 +1,50 @@
+using PDFtoImage;
 using SkiaSharp;
-using System;
 
 namespace Spectre.Rendering
 {
     public static class PdfRenderer
     {
-        public static string RenderToMonochromePng(string inputPdfPath, int dpi = 203)
+        /// <summary>
+        /// Renders every page of a PDF to grayscale PNG files on disk.
+        /// Returns a list of output paths, one per page.
+        /// </summary>
+        public static IReadOnlyList<string> RenderPages(string inputPdfPath, int dpi = 203)
         {
-            var outputPath = System.IO.Path.ChangeExtension(inputPdfPath, ".png");
+            var options = new RenderOptions(
+                Dpi: dpi,
+                WithAnnotations: true,
+                WithFormFill: true,
+                Grayscale: true,
+                BackgroundColor: SKColors.White);
 
-            int width = 800, height = 1200; // typical label size at 203dpi
-            using var bitmap = new SKBitmap(width, height, SKColorType.Gray8, SKAlphaType.Opaque);
-            using var canvas = new SKCanvas(bitmap);
-            canvas.Clear(SKColors.White);
+            var basePath = Path.ChangeExtension(inputPdfPath, null);
+            var pngPaths = new List<string>();
 
-            var paint = new SKPaint
+            using var stream = File.OpenRead(inputPdfPath);
+
+            foreach (var bitmap in Conversion.ToImages(stream, leaveOpen: true, password: null, options: options))
             {
-                Color = SKColors.Black,
-                IsAntialias = true
-            };
+                using (bitmap)
+                {
+                    // First page gets a clean name; subsequent pages are numbered.
+                    var outputPath = pngPaths.Count == 0
+                        ? $"{basePath}.png"
+                        : $"{basePath}_p{pngPaths.Count + 1:D4}.png";
 
-            var font = new SKFont
-            {
-                Size = 24
-            };
+                    using var image = SKImage.FromBitmap(bitmap);
+                    using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+                    File.WriteAllBytes(outputPath, data.ToArray());
 
-            canvas.DrawText("Sample Label PDF Rendered", 100, 100, SKTextAlign.Left, font, paint);
-            canvas.DrawText(DateTime.Now.ToString("g"), 100, 140, SKTextAlign.Left, font, paint);
+                    Console.Error.WriteLine($"Spectre: page {pngPaths.Count + 1} rendered ({bitmap.Width}x{bitmap.Height}) → {outputPath}");
+                    pngPaths.Add(outputPath);
+                }
+            }
 
-            using var image = SKImage.FromBitmap(bitmap);
-            using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-            System.IO.File.WriteAllBytes(outputPath, data.ToArray());
+            if (pngPaths.Count == 0)
+                throw new InvalidOperationException($"No pages rendered from: {inputPdfPath}");
 
-            Console.WriteLine($"> PNG written: {outputPath}");
-            return outputPath;
+            return pngPaths;
         }
     }
 }
