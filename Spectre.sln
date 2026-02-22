@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35825.156 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spectre", "Spectre.csproj", "{CBBC89CE-27F2-58C1-9047-55822C20CDAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spectre.Tests", "Spectre.Tests\Spectre.Tests.csproj", "{3A4B5C6D-7E8F-9A0B-C1D2-E3F4A5B6C7D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{CBBC89CE-27F2-58C1-9047-55822C20CDAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBBC89CE-27F2-58C1-9047-55822C20CDAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBBC89CE-27F2-58C1-9047-55822C20CDAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A4B5C6D-7E8F-9A0B-C1D2-E3F4A5B6C7D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A4B5C6D-7E8F-9A0B-C1D2-E3F4A5B6C7D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A4B5C6D-7E8F-9A0B-C1D2-E3F4A5B6C7D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A4B5C6D-7E8F-9A0B-C1D2-E3F4A5B6C7D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
